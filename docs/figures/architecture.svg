@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <style>text { font-family: Helvetica, Arial, sans-serif; }</style>
+  <title>EfficientViT-B1 Stage 4 accelerator: system data flow</title>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto-start-reverse">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb" />
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto-start-reverse">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#9333ea" />
+    </marker>
+    <marker id="arrow-gray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto-start-reverse">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280" />
+    </marker>
+  </defs>
+  <rect id="background" x="0" y="0" width="1200" height="760" fill="#ffffff" />
+
+  
+  <text x="30" y="38" font-size="20" font-weight="600" fill="#111827">EfficientViT-B1 Stage 4 accelerator: system data flow</text>
+  <text x="30" y="60" font-size="13" fill="#6b7280">Four LiteMLA + MBConv blocks (backbone.stages[3]) run on the FPGA; the rest of the network stays in PyTorch on the host.</text>
+
+  
+  <g id="containers">
+    <rect id="c-host" x="30" y="78" width="1140" height="116" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="6 4" />
+    <text x="46" y="96" font-size="12" font-weight="600" fill="#475569">HOST PC (Python, PyTorch)</text>
+    <rect id="c-board" x="30" y="214" width="1140" height="468" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="6 4" />
+    <text x="46" y="232" font-size="12" font-weight="600" fill="#475569">VCU128 BOARD (XCVU37P), VIVADO BLOCK DESIGN</text>
+    <rect id="c-accel" x="72" y="344" width="1088" height="326" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2" />
+    <text x="470" y="368" font-size="12" font-weight="600" fill="#475569">accelerator_top (RTL v4.1, 62.5 MHz)</text>
+  </g>
+
+  
+  <g id="n-net">
+    <rect x="90" y="110" width="280" height="64" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="230" y="136" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">PyTorch EfficientViT-Seg-B1</text>
+    <text x="230" y="156" font-size="12" fill="#6b7280" text-anchor="middle">stem, stages 1-3 and head in FP32</text>
+  </g>
+  <g id="n-backend">
+    <rect x="470" y="110" width="280" height="64" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="610" y="136" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">host/hybrid.py</text>
+    <text x="610" y="156" font-size="12" fill="#6b7280" text-anchor="middle">Stage 4 backend: fpga, model or file</text>
+  </g>
+  <g id="n-golden">
+    <rect x="860" y="110" width="280" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5" />
+    <text x="1000" y="136" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">Integer reference models</text>
+    <text x="1000" y="156" font-size="12" fill="#6b7280" text-anchor="middle">rtl_model.py, evit_hw_golden.py</text>
+  </g>
+
+  
+  <g id="n-bram">
+    <rect x="90" y="250" width="280" height="64" rx="8" fill="#f0fdfa" stroke="#14b8a6" stroke-width="1.5" />
+    <text x="230" y="276" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">AXI BRAM controllers + BRAMs</text>
+    <text x="230" y="296" font-size="12" fill="#6b7280" text-anchor="middle">x, 10 weight and bias arrays, y</text>
+  </g>
+  <g id="n-xdma">
+    <rect x="470" y="250" width="280" height="64" rx="8" fill="#f0fdfa" stroke="#14b8a6" stroke-width="1.5" />
+    <text x="610" y="276" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">XDMA PCIe endpoint</text>
+    <text x="610" y="296" font-size="12" fill="#6b7280" text-anchor="middle">H2C / C2H DMA, user BAR</text>
+  </g>
+  <g id="n-regs">
+    <rect x="860" y="250" width="280" height="64" rx="8" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5" />
+    <text x="1000" y="276" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">AXI-Lite registers</text>
+    <text x="1000" y="296" font-size="12" fill="#6b7280" text-anchor="middle">Efficient_vit_v2_v1_0_S00_AXI</text>
+  </g>
+
+  
+  <g id="n-cluster">
+    <rect x="90" y="384" width="280" height="92" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2" />
+    <text x="230" y="408" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">conv_cluster</text>
+    <text x="230" y="427" font-size="12" fill="#374151" text-anchor="middle">8 x 16x16 weight-stationary arrays</text>
+    <text x="230" y="444" font-size="12" fill="#374151" text-anchor="middle">shadow weights, 8-bank banked_sram</text>
+    <text x="230" y="461" font-size="12" fill="#6b7280" text-anchor="middle">1x1 convs: QKV, proj, expand, point</text>
+  </g>
+  <g id="n-mla">
+    <rect x="470" y="384" width="280" height="92" rx="8" fill="#faf5ff" stroke="#8b5cf6" stroke-width="1.5" />
+    <text x="610" y="408" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">litemla_core2</text>
+    <text x="610" y="427" font-size="12" fill="#374151" text-anchor="middle">ReLU linear attention, 16 heads</text>
+    <text x="610" y="444" font-size="12" fill="#374151" text-anchor="middle">two context banks: head h+1 builds</text>
+    <text x="610" y="461" font-size="12" fill="#6b7280" text-anchor="middle">while head h streams q</text>
+  </g>
+  <g id="n-fsm">
+    <rect x="860" y="392" width="280" height="76" rx="8" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5" />
+    <text x="1000" y="418" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">Top-level FSM</text>
+    <text x="1000" y="438" font-size="12" fill="#6b7280" text-anchor="middle">LOAD_X, M1, ATT_Q, ATT_MS,</text>
+    <text x="1000" y="455" font-size="12" fill="#6b7280" text-anchor="middle">M3, P2, P3, P4; cycle counter</text>
+  </g>
+  <g id="n-resid">
+    <rect x="90" y="560" width="280" height="72" rx="8" fill="#ffffff" stroke="#d1d5db" stroke-width="1.5" />
+    <text x="230" y="586" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">Residual adders</text>
+    <text x="230" y="606" font-size="12" fill="#6b7280" text-anchor="middle">y = sat(sat(x + proj) + pw)</text>
+  </g>
+  <g id="n-dw">
+    <rect x="470" y="560" width="280" height="72" rx="8" fill="#fff7ed" stroke="#f97316" stroke-width="1.5" />
+    <text x="610" y="584" font-size="14" font-weight="600" fill="#111827" text-anchor="middle">Depthwise engines</text>
+    <text x="610" y="603" font-size="12" fill="#374151" text-anchor="middle">dw_conv_engine x2: MS branch, MBConv</text>
+    <text x="610" y="620" font-size="12" fill="#6b7280" text-anchor="middle">5x5 DW, group 1x1, hswish</text>
+  </g>
+
+  
+  <g id="edges">
+    <line id="e-net-backend" x1="370" y1="142" x2="467" y2="142" stroke="#2563eb" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+    <line id="e-backend-golden" x1="750" y1="142" x2="857" y2="142" stroke="#6b7280" stroke-dasharray="5 4" marker-end="url(#arrow-gray)" fill="none" stroke-width="1.6" />
+    <line id="e-backend-xdma" x1="610" y1="174" x2="610" y2="247" stroke="#2563eb" marker-start="url(#arrow-blue)" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+    <line id="e-xdma-bram" x1="470" y1="282" x2="373" y2="282" stroke="#2563eb" marker-start="url(#arrow-blue)" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+    <line id="e-xdma-regs" x1="750" y1="282" x2="857" y2="282" stroke="#9333ea" stroke-dasharray="5 4" marker-end="url(#arrow-purple)" fill="none" stroke-width="1.6" />
+    <line id="e-regs-fsm" x1="1000" y1="314" x2="1000" y2="389" stroke="#9333ea" stroke-dasharray="5 4" marker-start="url(#arrow-purple)" marker-end="url(#arrow-purple)" fill="none" stroke-width="1.6" />
+    <line id="e-bram-cluster" x1="230" y1="314" x2="230" y2="381" stroke="#2563eb" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+    <line id="e-cluster-mla" x1="373" y1="430" x2="467" y2="430" stroke="#2563eb" marker-start="url(#arrow-blue)" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+    <path id="e-cluster-dw" d="M 355 478 V 520 H 560 V 557" stroke="#2563eb" marker-start="url(#arrow-blue)" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+    <line id="e-dw-mla" x1="690" y1="560" x2="690" y2="479" stroke="#2563eb" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+    <line id="e-cluster-resid" x1="170" y1="476" x2="170" y2="557" stroke="#2563eb" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+    <path id="e-resid-bram" d="M 90 596 H 52 V 282 H 87" stroke="#2563eb" marker-end="url(#arrow-blue)" fill="none" stroke-width="1.6" />
+  </g>
+
+  
+  <g id="edge-labels">
+    <text x="418" y="134" text-anchor="middle" font-size="12" fill="#1f2937">x (int16)</text>
+    <text x="803" y="134" text-anchor="middle" font-size="12" fill="#1f2937">compare y</text>
+    <text x="620" y="200" font-size="12" fill="#1f2937">PCIe</text>
+    <text x="420" y="274" text-anchor="middle" font-size="12" fill="#1f2937">AXI4</text>
+    <text x="803" y="274" text-anchor="middle" font-size="12" fill="#1f2937">AXI-Lite</text>
+    <text x="1010" y="334" font-size="12" fill="#1f2937">start / done / cycles</text>
+    <text x="240" y="334" font-size="12" fill="#1f2937">x, weights, biases</text>
+    <text x="420" y="422" text-anchor="middle" font-size="12" fill="#1f2937">q, k, v</text>
+    <text x="420" y="448" text-anchor="middle" font-size="12" fill="#1f2937">h1, h2</text>
+    <text x="460" y="512" text-anchor="middle" font-size="12" fill="#1f2937">q, k, v / expand out ; dw out</text>
+    <text x="700" y="530" font-size="12" fill="#1f2937">q2, k2, v2</text>
+    <text x="180" y="530" font-size="12" fill="#1f2937">proj, pw</text>
+    <text x="45" y="440" text-anchor="middle" transform="rotate(-90 45 440)" font-size="12" fill="#1f2937">y readback</text>
+  </g>
+
+  
+  <g id="legend">
+    <line x1="40" y1="716" x2="80" y2="716" stroke="#2563eb" stroke-width="1.6" marker-end="url(#arrow-blue)" />
+    <text x="90" y="720" font-size="12" fill="#374151">data (int16 activations and weights)</text>
+    <line x1="340" y1="716" x2="380" y2="716" stroke="#9333ea" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrow-purple)" />
+    <text x="390" y="720" font-size="12" fill="#374151">control</text>
+    <line x1="480" y1="716" x2="520" y2="716" stroke="#6b7280" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrow-gray)" />
+    <text x="530" y="720" font-size="12" fill="#374151">bit-exact check on the host</text>
+    <text x="40" y="746" fill="#6b7280" font-size="12">Module names from rtl/; the board side follows the Vivado block design (address map in scripts/vivado/update_bd.tcl).</text>
+  </g>
+</svg>
