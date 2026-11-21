@@ -1,0 +1,57 @@
+{
+  "image": "test.png",
+  "image_sha256": "7c9c3fdc53dd84f3143c56bd8fec2d96cc3b36a6f7e7237db59cd4eabf20579f",
+  "ckpt_sha256": "80c305bb2a94b9217187bfe4c029618503e0a7c6651edfe2e8a6cfc226426dd4",
+  "size": 512,
+  "dataset": "cityscapes",
+  "backend": "model",
+  "blocks": {
+    "block_0": {
+      "cycles": null,
+      "t_upload_ms": 0.0,
+      "t_compute_ms": 795.9131000097841,
+      "t_readback_ms": 0.0,
+      "bit_exact": true,
+      "mismatches": 0,
+      "max_abs_diff": 0,
+      "cosine_vs_fp32": 0.985031247138977,
+      "mse_vs_fp32": 0.05840300768613815
+    },
+    "block_1": {
+      "cycles": null,
+      "t_upload_ms": 0.0,
+      "t_compute_ms": 780.8445999980904,
+      "t_readback_ms": 0.0,
+      "bit_exact": true,
+      "mismatches": 0,
+      "max_abs_diff": 0,
+      "cosine_vs_fp32": 0.971792459487915,
+      "mse_vs_fp32": 0.15044167637825012
+    },
+    "block_2": {
+      "cycles": null,
+      "t_upload_ms": 0.0,
+      "t_compute_ms": 777.6461000321433,
+      "t_readback_ms": 0.0,
+      "bit_exact": true,
+      "mismatches": 0,
+      "max_abs_diff": 0,
+      "cosine_vs_fp32": 0.9554727077484131,
+      "mse_vs_fp32": 0.2992132604122162
+    },
+    "block_3": {
+      "cycles": null,
+      "t_upload_ms": 0.0,
+      "t_compute_ms": 787.3317999765277,
+      "t_readback_ms": 0.0,
+      "bit_exact": true,
+      "mismatches": 0,
+      "max_abs_diff": 0,
+      "cosine_vs_fp32": 0.9410995244979858,
+      "mse_vs_fp32": 0.5101519823074341
+    }
+  },
+  "t_fp32_ms": 252.5644000270404,
+  "t_hw_pipeline_ms": 6484.075199987274,
+  "mask_agreement_vs_fp32": 0.9915885925292969
+}

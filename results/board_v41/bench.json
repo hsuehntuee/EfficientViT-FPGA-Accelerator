@@ -1,0 +1,64 @@
+{
+  "block_0": {
+    "bit_exact_every_iteration": true,
+    "cycles": 126999,
+    "weights_MB": 2.331648,
+    "t_weights_ms": 19.668323000018972,
+    "weights_MBps": 118.54838869575971,
+    "t_x_ms": 0.9320049999814728,
+    "t_compute_ms": 2.0509134999997514,
+    "t_readback_ms": 1.1797014999501698,
+    "clock_MHz_est": 61.923138152835506,
+    "tokens": 256,
+    "GMAC_per_s_compute_only": 115.61677272104784
+  },
+  "block_1": {
+    "bit_exact_every_iteration": true,
+    "cycles": 126999,
+    "weights_MB": 2.331648,
+    "t_weights_ms": 19.768024000029527,
+    "weights_MBps": 117.95048407450928,
+    "t_x_ms": 0.9278549999862662,
+    "t_compute_ms": 2.0510114999865436,
+    "t_readback_ms": 0.9902869999791619,
+    "clock_MHz_est": 61.920179385065964,
+    "tokens": 256,
+    "GMAC_per_s_compute_only": 115.61124840185231
+  },
+  "block_2": {
+    "bit_exact_every_iteration": true,
+    "cycles": 126999,
+    "weights_MB": 2.331648,
+    "t_weights_ms": 19.70199199996614,
+    "weights_MBps": 118.3457997548678,
+    "t_x_ms": 0.9166280000272309,
+    "t_compute_ms": 2.050523499974588,
+    "t_readback_ms": 1.227021000033801,
+    "clock_MHz_est": 61.93491564547975,
+    "tokens": 256,
+    "GMAC_per_s_compute_only": 115.63876249306024
+  },
+  "block_3": {
+    "bit_exact_every_iteration": true,
+    "cycles": 126999,
+    "weights_MB": 2.331648,
+    "t_weights_ms": 19.509810499982905,
+    "weights_MBps": 119.51156573263708,
+    "t_x_ms": 0.9443814999485767,
+    "t_compute_ms": 2.0513819999905536,
+    "t_readback_ms": 1.0969734999548564,
+    "clock_MHz_est": 61.90899598445576,
+    "tokens": 256,
+    "GMAC_per_s_compute_only": 115.59036785985833
+  },
+  "per_image": {
+    "blocks": 4,
+    "reload_ms": 95.06683249981052,
+    "reload_fps": 10.518915732277009,
+    "resident_ms": 16.418682999812972,
+    "resident_fps": 60.90622493968555,
+    "compute_only_ms": 8.203830499951437,
+    "compute_only_fps": 121.89427853317052,
+    "GMAC_per_s_compute_only": 115.61428530314159
+  }
+}
