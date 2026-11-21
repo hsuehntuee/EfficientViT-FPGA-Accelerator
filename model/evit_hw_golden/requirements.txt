@@ -1,0 +1,7 @@
+# Verified with Python 3.10.19, torch 2.11.0.dev20260114+cu128 (CPU execution).
+torch
+torchvision
+numpy
+pillow
+matplotlib
+timm  # imported by the efficientvit package
