@@ -1,0 +1,51 @@
+# Test vectors (60 MB; regenerate with scripts/run_evit_gen.py) and image batches
+hw_export*/
+batch_*/
+*.zip
+
+# Checkpoints and generated arrays
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
+
+# Outputs of the documented commands
+results/test_model/*
+!results/test_model/result.json
+results/kitti512/
+sim_out/
+.sim_tmp/
+data/
+
+# Vivado projects, build products and logs
+*.xpr
+*.cache/
+*.hw/
+*.runs/
+*.sim/
+*.ip_user_files/
+*.gen/
+.Xil/
+*.jou
+*.log
+*.str
+*.rpt
+*.dcp
+*.bit
+*.ltx
+*.wdb
+*.vcd
+*.fst
+
+# Python, editors, OS
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini

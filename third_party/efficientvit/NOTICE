@@ -1,0 +1,18 @@
+This directory contains part of EfficientViT by MIT HAN Lab
+https://github.com/mit-han-lab/efficientvit
+Licensed under the Apache License, Version 2.0 (see LICENSE in this directory).
+The integer reference models in this repository were checked against upstream commit de7d773.
+
+Only the seven files needed to build EfficientViT-Seg-B1 are kept:
+  models/efficientvit/backbone.py, models/efficientvit/seg.py,
+  models/nn/act.py, models/nn/norm.py, models/nn/ops.py,
+  models/utils/list.py, models/utils/network.py
+plus the package __init__.py files.
+
+Modifications:
+  - models/efficientvit/__init__.py, models/nn/__init__.py, models/utils/__init__.py:
+    import only the modules listed above.
+  - models/nn/norm.py: the Triton RMSNorm kernel (triton_rms_norm.py, not included) is
+    imported inside TritonRMSNorm2d.forward instead of at module level. EfficientViT-Seg-B1
+    does not use that layer.
+All other kept files are unchanged.
