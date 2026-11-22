@@ -31,6 +31,8 @@ All four Stage 4 blocks at 512x512 input, measured on the VCU128 unless stated o
 
 Against v4.1 on the same board, an image takes 1.55 ms instead of 95.1 ms (61x), and compute alone 1.38 ms instead of 8.2 ms, on half the DSPs.
 
+The v6 mIoU comes from a later evaluation script, which gives 44.09% for the int16 arithmetic of v4.1, so the mIoU figures of the two tables are not directly comparable.
+
 ### v4.1, int16
 
 All numbers are for one Stage 4 block at 512x512 input unless stated otherwise.

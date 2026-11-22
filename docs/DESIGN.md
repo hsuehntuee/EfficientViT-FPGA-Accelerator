@@ -197,4 +197,4 @@ In order of expected return:
 4. Keep the 9.3 MB of weights resident in URAM, run all four blocks from one start, and double the cluster to 16 arrays (which needs two weight read ports). Estimated 0.37 ms per block, about 1.35 TOPS. These are paper estimates.
 5. Only then INT8 arithmetic or token skipping, each step checked with the same bit-exact flow and a new mIoU measurement.
 
-Steps 1 and 3, the resident weights of step 4, and INT8 from step 5 were built in November 2026 as v5 (int16) and v6 (INT8), both measured on the board: 2.65 ms and 1.55 ms per image for the four blocks, bit-exact on 200 KITTI images. Their sources are not in this repository yet; the README has the numbers.
+Steps 1 and 3, the resident weights of step 4, and INT8 from step 5 were built in November 2026 as v5 (int16) and v6 (INT8), both measured on the board: 2.65 ms and 1.55 ms per image for the four blocks, bit-exact on 200 KITTI images. The v6 RTL is in `rtl_v6/` and the README has the numbers; v5 is not included.
