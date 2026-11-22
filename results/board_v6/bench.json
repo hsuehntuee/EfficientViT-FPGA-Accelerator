@@ -1,0 +1,67 @@
+{
+  "weights": {
+    "MB": 4.012032,
+    "t_ms": 3.7310030000980987,
+    "MB_per_s": 1075.3226410953066
+  },
+  "per_image_chain": {
+    "t_x_ms": 0.08114349998322723,
+    "t_compute_ms": 1.384015499979796,
+    "t_readback_ms": 0.08388300000206073,
+    "t_total_ms": 1.5498710000088067,
+    "t_total_ms_p95": 1.6350957500378624,
+    "cycles": 273648,
+    "clock_MHz_lower_bound": 197.72032900209192,
+    "bit_exact_every_iteration": true,
+    "images_per_s": 645.214988856697,
+    "GMAC_per_s_compute_only": 685.310244006549,
+    "cycles_at_block_end": [
+      68411,
+      136823,
+      205235,
+      273647
+    ]
+  },
+  "per_block": {
+    "block_0": {
+      "t_x_ms": 0.07373099998631005,
+      "t_compute_ms": 0.3509330000497357,
+      "t_readback_ms": 0.07857949998424374,
+      "t_total_ms": 0.5043735000072047,
+      "t_total_ms_p95": 0.5404702500072744,
+      "cycles": 68412,
+      "clock_MHz_lower_bound": 194.9431942573208,
+      "bit_exact_every_iteration": true
+    },
+    "block_1": {
+      "t_x_ms": 0.07352250003123117,
+      "t_compute_ms": 0.3511810000418336,
+      "t_readback_ms": 0.07689099999197424,
+      "t_total_ms": 0.5016474999592901,
+      "t_total_ms_p95": 0.5069876500158443,
+      "cycles": 68412,
+      "clock_MHz_lower_bound": 194.80552761069242,
+      "bit_exact_every_iteration": true
+    },
+    "block_2": {
+      "t_x_ms": 0.07330450000608835,
+      "t_compute_ms": 0.3511390000312531,
+      "t_readback_ms": 0.07781699997622127,
+      "t_total_ms": 0.5022149999831527,
+      "t_total_ms_p95": 0.5070317500212695,
+      "cycles": 68412,
+      "clock_MHz_lower_bound": 194.82882845229668,
+      "bit_exact_every_iteration": true
+    },
+    "block_3": {
+      "t_x_ms": 0.07309149998491193,
+      "t_compute_ms": 0.3511934999664845,
+      "t_readback_ms": 0.07651200002101177,
+      "t_total_ms": 0.5011305000266475,
+      "t_total_ms_p95": 0.5076439499987373,
+      "cycles": 68412,
+      "clock_MHz_lower_bound": 194.7985939561204,
+      "bit_exact_every_iteration": true
+    }
+  }
+}
