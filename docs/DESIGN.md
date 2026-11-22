@@ -180,7 +180,7 @@ Full numbers are in [`results/implementation_summary.md`](../results/implementat
 
 ## Limits
 
-- The PCIe link trained at Gen1 x1 (checked with `lspci`), so a block's 2.33 MB of weights takes 19.7 ms to upload against 2.05 ms of compute. With weights re-sent for every image, 79 of the 95 ms per image are weight transfer.
+- The PCIe link ran at Gen1 x1 (checked with `lspci`), so a block's 2.33 MB of weights takes 19.7 ms to upload against 2.05 ms of compute. The cause, found in November 2026, was the XDMA IP left at its default of one lane at 2.5 GT/s; the slot itself supports 8 GT/s. With weights re-sent for every image, 79 of the 95 ms per image are weight transfer.
 - The whole design runs on the XDMA's 62.5 MHz `axi_aclk`; the accelerator has no clock domain of its own yet.
 - BRAM is at 85% while URAM is unused. The expand buffer (`sram_exp`) lands in BRAM because `banked_sram` has an unused second read port.
 - Each block needs its own start command and its own round trip from the host; chaining four blocks needs a block counter, weight switching and a new address map.
@@ -191,8 +191,10 @@ Full numbers are in [`results/implementation_summary.md`](../results/implementat
 
 In order of expected return:
 
-1. Configure the XDMA for Gen3 x8 and check the slot. Weight upload would fall from about 79 ms to under 3 ms per image and a full image from about 95 ms to about 17 ms, with no RTL change.
+1. Configure the XDMA for Gen3 x8. Weight upload would fall from about 79 ms to under 3 ms per image and a full image from about 95 ms to about 17 ms, with no RTL change.
 2. Remove the unused second read port (`raddr2`) from `banked_sram` so that `sram_exp` maps to URAM, freeing about 230 BRAMs.
 3. Give the accelerator its own 200 MHz clock domain: add a clock wizard to the block design, synchronise `start`, `done` and the cycle counter, add two pipeline stages (BRAM to the adder array and cluster input; the 272 attention multiply-accumulates) and possibly reschedule the 32-stage 64-bit divider. Estimated 0.64 ms per block, about 740 GOPS.
 4. Keep the 9.3 MB of weights resident in URAM, run all four blocks from one start, and double the cluster to 16 arrays (which needs two weight read ports). Estimated 0.37 ms per block, about 1.35 TOPS. These are paper estimates.
 5. Only then INT8 arithmetic or token skipping, each step checked with the same bit-exact flow and a new mIoU measurement.
+
+Steps 1 and 3 and the resident weights of step 4 are being built as v5 (November 2026): XDMA at Gen3 x8, the weights of all four blocks in UltraRAM, one to four blocks per start, and a separate accelerator clock with a re-pipelined datapath. v5 is bit-exact in RTL simulation at 123,193 cycles per block and meets timing at 200 MHz with no margin. It has not run on the board, and its sources are not in this repository yet.

@@ -21,7 +21,7 @@ All numbers are for one Stage 4 block at 512x512 input unless stated otherwise.
 | Compute time per block | 2.05 ms (median of 20, start to done, includes polling) | `results/board_v41/bench.json` |
 | Throughput, compute only | 115.6 GMAC/s = 231 GOPS | `results/board_v41/bench.json` |
 | Stage 4 per image, weights resident in BRAM | 16.9 ms median (59.2 images/s) over the 200-image batch | `results/board_v41/results.json` |
-| Weight upload per block | 19.7 ms for 2.33 MB (118 MB/s; the PCIe link trained at Gen1 x1) | `results/board_v41/bench.json` |
+| Weight upload per block | 19.7 ms for 2.33 MB (118 MB/s; the XDMA IP was still at its default Gen1 x1 setting) | `results/board_v41/bench.json` |
 | CPU baseline, four blocks, FP32 | 120.5 ms on an i9-13900H (PyTorch 2.6, median of 10) vs. 8.2 ms board compute (14.7x) | measured on a laptop on 2026-10-10 and recorded in `docs/DESIGN.md`; no log file in the repository |
 | Clock and timing | 62.5 MHz, WNS +0.532 ns, no failing endpoints | `results/implementation_summary.md` |
 | Resources (full design, XCVU37P) | LUT 264,391 (20.3%), FF 273,825, RAMB36 1,703 (84.5%, 770 of them in the accelerator), DSP 4,755 (52.7%), URAM 0 | `results/implementation_summary.md` |
@@ -98,14 +98,17 @@ I (Yen-Hung Hsueh, `hsuehntuee`) designed and verified the RTL, wrote both integ
 
 ## Status
 
-The project closed in October 2026 at RTL v4.1. All four blocks run on the board inside the full network and match the integer models bit for bit. It runs at 62.5 MHz with WNS +0.532 ns. In order of expected return, the next steps would be:
+The version in this repository, v4.1, runs all four blocks on the board inside the full network and matches the integer models bit for bit, at 62.5 MHz with WNS +0.532 ns.
 
-1. Fix the PCIe link. It trained at Gen1 x1, so weight upload takes 19.7 ms per block, against 2.05 ms of compute. A Gen3 x8 link would cut a full image from about 95 ms to about 17 ms with no RTL change.
-2. Move `sram_exp` into URAM. An unused second read port in `banked_sram` pushes it into BRAM; removing it frees about 230 BRAMs.
-3. Add a separate 200 MHz accelerator clock domain. This needs two extra pipeline stages and a rescheduled 64-bit divider; the estimate is about 0.64 ms per block.
-4. Keep the weights resident in URAM, start all four blocks with one command, and double the cluster to 16 arrays. These are estimates on paper only.
+A follow-up version, v5, is in progress (November 2026) and is not in this repository yet. It removes the first three limits of v4.1:
 
-Not done: INT8 arithmetic, the 16-array cluster, the classification stem and Stages 1 and 2, and token batching. The power number is a Vivado estimate. Some RTL comments are in Chinese.
+- The slow PCIe link came from a setting left at its default: the XDMA IP was generated for one lane at 2.5 GT/s. v5 configures it for Gen3 x8.
+- The weights of all four blocks stay resident in UltraRAM, and one start command runs one to four blocks.
+- The accelerator has its own clock, and the datapath was re-pipelined for it.
+
+v5 is bit-exact in RTL simulation against the same test vectors at 123,193 cycles per block, and its implementation meets timing at 200 MHz on the same device with no margin (WNS 0.000 ns). It has not run on the board yet, so this README states no v5 speed. The v5 sources will be added after the board test.
+
+Still not done: INT8 arithmetic, the 16-array cluster, the classification stem and Stages 1 and 2, and token batching. The power number is a Vivado estimate. Some RTL comments are in Chinese.
 
 ## Acknowledgements / License
 
