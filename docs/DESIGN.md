@@ -197,4 +197,4 @@ In order of expected return:
 4. Keep the 9.3 MB of weights resident in URAM, run all four blocks from one start, and double the cluster to 16 arrays (which needs two weight read ports). Estimated 0.37 ms per block, about 1.35 TOPS. These are paper estimates.
 5. Only then INT8 arithmetic or token skipping, each step checked with the same bit-exact flow and a new mIoU measurement.
 
-Steps 1 and 3 and the resident weights of step 4 are being built as v5 (November 2026): XDMA at Gen3 x8, the weights of all four blocks in UltraRAM, one to four blocks per start, and a separate accelerator clock with a re-pipelined datapath. v5 is bit-exact in RTL simulation at 123,193 cycles per block and meets timing at 200 MHz with no margin. It has not run on the board, and its sources are not in this repository yet.
+Steps 1 and 3, the resident weights of step 4, and INT8 from step 5 were built in November 2026 as v5 (int16) and v6 (INT8), both measured on the board: 2.65 ms and 1.55 ms per image for the four blocks, bit-exact on 200 KITTI images. Their sources are not in this repository yet; the README has the numbers.

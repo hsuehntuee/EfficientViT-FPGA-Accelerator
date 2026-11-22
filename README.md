@@ -100,15 +100,24 @@ I (Yen-Hung Hsueh, `hsuehntuee`) designed and verified the RTL, wrote both integ
 
 The version in this repository, v4.1, runs all four blocks on the board inside the full network and matches the integer models bit for bit, at 62.5 MHz with WNS +0.532 ns.
 
-A follow-up version, v5, is in progress (November 2026) and is not in this repository yet. It removes the first three limits of v4.1:
+Two later versions were built and measured on the same VCU128 in November 2026. Their sources are not in this repository yet.
 
-- The slow PCIe link came from a setting left at its default: the XDMA IP was generated for one lane at 2.5 GT/s. v5 configures it for Gen3 x8.
-- The weights of all four blocks stay resident in UltraRAM, and one start command runs one to four blocks.
-- The accelerator has its own clock, and the datapath was re-pipelined for it.
+- v5 keeps the int16 arithmetic and removes three limits of v4.1. The XDMA IP had been left at its default of one lane at 2.5 GT/s; v5 runs the link at Gen3 x8. The weights of all four blocks stay resident in UltraRAM, so one start command runs the whole stage. The accelerator has its own 200 MHz clock, with a re-pipelined datapath.
+- v6 is v5 with INT8 arithmetic. Each DSP computes two products, activations use per-channel power-of-two scales, and the bias of every channel is corrected on calibration images. The scheme was measured before any RTL was written.
 
-v5 is bit-exact in RTL simulation against the same test vectors at 123,193 cycles per block, and its implementation meets timing at 200 MHz on the same device with no margin (WNS 0.000 ns). It has not run on the board yet, so this README states no v5 speed. The v5 sources will be added after the board test.
+| Measured on the board | v4.1 (this repository) | v5 (int16) | v6 (INT8) |
+|---|---|---|---|
+| Stage 4 per image, four blocks | 95.1 ms (weights re-sent per block) | 2.65 ms | 1.55 ms (645 images/s) |
+| Compute per block | 2.05 ms | 0.625 ms | 0.351 ms |
+| Compute throughput | 231 GOPS | 764 GOPS | 1,371 GOPS |
+| Clock | 62.5 MHz | 200 MHz | 200 MHz |
+| DSP | 4,755 | 4,305 | 2,321 |
+| Bit-exact on the board | 800 of 800 block runs | 12 runs and 200 KITTI images | 12 runs and 200 KITTI images |
+| mIoU on 200 KITTI images (FP32 43.26%) | 44.52% | 44.09% | 43.37% |
 
-Still not done: INT8 arithmetic, the 16-array cluster, the classification stem and Stages 1 and 2, and token batching. The power number is a Vivado estimate. Some RTL comments are in Chinese.
+The v5 and v6 mIoU figures come from one later evaluation script, so they are not directly comparable with the v4.1 figure. Power is a Vivado estimate for all three (11.1, 27.3 and 22.4 W).
+
+Still not done: the 16-array cluster, the classification stem and Stages 1 and 2, and token batching. The host memory port of v5 and v6 ignores byte enables, so the host writes from page-aligned buffers. Some RTL comments are in Chinese.
 
 ## Acknowledgements / License
 
